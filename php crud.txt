@@ -1,0 +1,125 @@
+		<?php
+	include 'connection.php';
+	
+	session_start();
+    $msg="";
+    if(isset($_POST['submit']))
+	{
+		$tourname=$_POST['tourname'];
+		$price=$_POST['price'];
+		$date=$_POST['date'];
+		$days=$_POST['days'];
+        $mobileno=$_POST['mobileno'];
+
+
+        $insert="insert into booking (tourid,tourname,price,date,days,mobileno)Values('$tourid','$tourname','$price','$date','$days','$mobileno')";
+		echo $insert;
+			
+	
+		$exc=mysqli_query($con,$insert);
+		if($exc==true)
+{
+			header('location:bookhistory.php');
+		}
+			
+    }
+?>
+
+
+
+<?php
+	include 'connection.php';
+    if(isset($_GET['id']))
+	{
+		$id=$_GET['id'];
+		$del="delete from booking where tourid=$id";
+		$exc=mysqli_query($con,$del);
+		
+	}
+		
+?>
+ <table border='0' class="table table-hover">
+                           
+                                <tr>
+                                     <th>Edit</th>
+                                    <th>ID</th>
+                                    <th>Tour Name</th>
+                                    <th>Price</th>
+                                    <th>Date</th>
+                                    <th>Days</th>
+                                    <th>Mobileno</th>
+                                    <th>Delete</th>
+                                </tr>
+                           
+                            <tbody>
+                            <?php 
+                                    $query = "SELECT * FROM booking";
+                                    $query_run = mysqli_query($con, $query);
+
+										if(mysqli_num_rows($query_run) > 0)
+										{
+											foreach($query_run as $tour)
+											{
+												?>
+                                               
+												<tr>
+                                                    <td><a href="edit.php?id=<?php echo $tour['tourid'];?>" class="btn btn-primary" > Edit </a></td>
+													<td><?= $tour['tourid']; ?></td>
+													<td><?= $tour['tourname']; ?></td>
+													<td><?= $tour['price']; ?></td>
+													<td><?= $tour['date']; ?></td>
+													<td><?= $tour['days']; ?></td>
+                                                    <td><?= $tour['mobileno']; ?></td>
+                                                     <td><a href="bookhistory.php?id=<?php echo $tour['tourid'];?>" class="btn btn-danger" > Delete </a></td>
+													
+                                                   
+                                                     <?php
+	include 'connection.php';
+    $id="";
+    $row="";
+    $tourname = "";
+    $price = "";
+     $date = "";
+     $days = "";
+     $mobileno = "";
+     $update="";
+
+     if( isset($_POST["submit"]))
+     {
+         $utourname = $_POST["tourname"];
+         $uprice = $_POST["price"];
+          $udate = $_POST["date"];
+          $udays = $_POST["days"];
+          $umobileno = $_POST["mobileno"];
+ 
+         $id=$_GET['id'];
+         $insert="update booking set tourname='$utourname',Price='$uprice',date='$udate',Days='$udays',mobileno='$umobileno' where tourid='$id'";
+         echo ($insert);
+         $exc=mysqli_query($con,$insert);
+         
+         if($exc){
+         	header('location:bookhistory.php');
+         }
+      }
+    
+	if(isset($_REQUEST["id"])){
+    $id=$_REQUEST["id"];
+    $update="select * from booking where tourid=$id ";
+    $exc=mysqli_query($con,$update);
+    $row = mysqli_fetch_assoc($exc);
+     if($row){
+        $tourname=$row['tourname'];
+        $price=$row['price'];
+        $date=$row['date'];
+        $days=$row['days'];
+        $mobileno=$row['mobileno'];
+       }
+   
+
+    }
+
+        
+
+?>
+
+required value=<?php echo $tourname?>>
